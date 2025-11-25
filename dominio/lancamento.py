@@ -1,4 +1,4 @@
-from categoria import Categoria
+from .categoria import Categoria
 from datetime import date, datetime
 
 class Lancamento:
@@ -60,7 +60,7 @@ class Lancamento:
         if not isinstance(nova_data, date):
             raise TypeError("A data de um lançamento deve ser um objeto datetime.date.")
         
-        self.__data = nova_data
+        self.__data = nova_data.strftime("%d/%m/%Y")
 
     @descricao.setter
     def descricao(self, nova_descricao: str):
@@ -77,19 +77,26 @@ class Lancamento:
     @forma_pagmto.setter
     def forma_pagmto(self, nova_forma):
 
-        metodos_pagamento = ["dinheiro", "débito", "crédito", "pix", "transferência"]
+        metodos_pagamento = ["DINHEIRO", "DÉBITO", "CRÉDITO", "PIX", "TRANSFERÊNCIA"]
 
         if not isinstance(nova_forma, str):
             TypeError("A forma de pagamento deve ser um objeto string.")
         
-        elif nova_forma.lower() not in metodos_pagamento:
+        elif nova_forma.upper() not in metodos_pagamento:
             TypeError("Forma de pagamento desconhecida.")
         
-        else:
-            self.__forma_pagmto = nova_forma
+        self.__forma_pagmto = nova_forma.upper()
 
     def __str__(self):
-        return f"ID: {self.__ID_lancamento} | {self.__categoria.nome} | R$ {self.__valor:,2f}"
+
+        data_formatada = self.__data
+
+        return (
+            f"ID: {self.__ID_lancamento} | "
+            f"Categoria: {self.categoria.nome} | "
+            f"Valor: R$ {self.valor:.2f} | "
+            f"Data: {data_formatada}"
+        )
     
     def __eq__(self, outro):
         # Comparação por ID ou data + descrição

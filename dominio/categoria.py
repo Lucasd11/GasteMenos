@@ -47,11 +47,11 @@ class Categoria:
             return
         
         elif self.__tipo == "DESPESA":
-            if novo_limite < 0:
-                raise ValueError("O limite mensal não pode ser negativo.")
-            
             if not isinstance(novo_limite, (int, float)):
                 raise TypeError("O limite deve ser um valor numérico.")
+            
+            if novo_limite < 0:
+                raise ValueError("O limite mensal não pode ser negativo.")
 
         self.__limite_mensal = novo_limite
 
@@ -63,5 +63,3 @@ class Categoria:
         
         self.__descricao = nova_descricao
     
-
-categoria1 = Categoria(1, "Aluguel", "despesa", 700.00, "Pague o aluguel!")

@@ -1,5 +1,6 @@
-from lancamento import Lancamento
-from categoria import Categoria
+from .lancamento import Lancamento
+from .categoria import Categoria
+from datetime import date
 
 class Despesa(Lancamento):
     """
@@ -12,4 +13,6 @@ class Despesa(Lancamento):
 
         if categoria.tipo != "DESPESA":
             raise TypeError("Despesa deve estar associada a uma categoria de DESPESA.")
+
+
 

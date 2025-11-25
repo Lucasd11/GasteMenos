@@ -1,5 +1,5 @@
-from lancamento import Lancamento
-from categoria import Categoria
+from .lancamento import Lancamento
+from .categoria import Categoria
 
 class Receita(Lancamento):
     """
