@@ -1,4 +1,4 @@
-from .categoria import Categoria
+from categoria import Categoria
 from datetime import date, datetime
 
 class Lancamento:
@@ -9,32 +9,16 @@ class Lancamento:
 
     def __init__(self, ID_lancamento: int, valor: float, categoria: Categoria, data: date = date.today(), descricao: str = "", forma_pagmto: str = ""):
         self.__ID_lancamento = ID_lancamento
-        self.__valor = valor
-        self.__categoria = categoria
-        self.__data = data
-        self.__descricao = descricao
-        self.__forma_pagmto = forma_pagmto
+        self.valor = valor
+        self.categoria = categoria
+        self.data = data
+        self.descricao = descricao
+        self.forma_pagmto = forma_pagmto
         
     @property
     def valor(self):
         return self.__valor
     
-    @property
-    def categoria(self):
-        return self.__categoria
-    
-    @property
-    def data(self):
-        return self.__data
-    
-    @property
-    def descricao(self):
-        return self.__descricao
-    
-    @property
-    def forma_pagmto(self):
-        return self.__forma_pagmto
-
     @valor.setter
     def valor(self, novo_valor):
         
@@ -45,7 +29,11 @@ class Lancamento:
             raise ValueError("O valor deve ser positivo e maior que zero.")
 
         self.__valor = float(novo_valor)
-
+    
+    @property
+    def categoria(self):
+        return self.__categoria
+    
     @categoria.setter
     def categoria(self, nova_categoria):
 
@@ -54,14 +42,22 @@ class Lancamento:
         
         self.__categoria = nova_categoria
 
+    @property
+    def data(self):
+        return self.__data
+    
     @data.setter
     def data(self, nova_data):
         
         if not isinstance(nova_data, date):
             raise TypeError("A data de um lançamento deve ser um objeto datetime.date.")
         
-        self.__data = nova_data.strftime("%d/%m/%Y")
+        self.__data = nova_data
 
+    @property
+    def descricao(self):
+        return self.__descricao
+    
     @descricao.setter
     def descricao(self, nova_descricao: str):
 
@@ -73,6 +69,10 @@ class Lancamento:
 
         else:
             self.__descricao = nova_descricao
+    
+    @property
+    def forma_pagmto(self):
+        return self.__forma_pagmto
 
     @forma_pagmto.setter
     def forma_pagmto(self, nova_forma):
@@ -80,24 +80,27 @@ class Lancamento:
         metodos_pagamento = ["DINHEIRO", "DÉBITO", "CRÉDITO", "PIX", "TRANSFERÊNCIA"]
 
         if not isinstance(nova_forma, str):
-            TypeError("A forma de pagamento deve ser um objeto string.")
+            raise TypeError("A forma de pagamento deve ser um objeto string.")
         
-        elif nova_forma.upper() not in metodos_pagamento:
-            TypeError("Forma de pagamento desconhecida.")
+        forma_upper = nova_forma.upper()
+
+        if forma_upper not in metodos_pagamento:
+            raise ValueError("Forma de pagamento desconhecida.")
         
         self.__forma_pagmto = nova_forma.upper()
 
     def __str__(self):
 
-        data_formatada = self.__data
+        data_formatada = self.data.strftime("%d/%m/%Y")
 
         return (
             f"ID: {self.__ID_lancamento} | "
             f"Categoria: {self.categoria.nome} | "
             f"Valor: R$ {self.valor:.2f} | "
-            f"Data: {data_formatada}"
+            f"Data: {data_formatada} | "
+            f"Forma de pagamento: {self.forma_pagmto}"
         )
-    
+
     def __eq__(self, outro):
         # Comparação por ID ou data + descrição
         if isinstance(outro, Lancamento):
@@ -106,3 +109,7 @@ class Lancamento:
         
         return False
 
+categoria1 = Categoria(1, "Aluguel", "receita", 600, "whatever")
+lancamento1 = Lancamento(101, 500, categoria1, date.today(), "whatever", "pix")
+
+print(lancamento1)

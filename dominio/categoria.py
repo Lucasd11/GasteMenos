@@ -6,39 +6,44 @@ class Categoria:
 
     def __init__(self, ID_categoria: int, nome: str, tipo: str, limite_mensal: float, descricao: str):
         self.__ID_categoria = ID_categoria
-        self.__nome = nome
-        self.__tipo = tipo.upper()
-        self.__limite_mensal = limite_mensal
-        self.__descricao = descricao
-
-    @property    
-    def ID_categoria(self):
-        return self.__ID_categoria
+        self.nome = nome
+        self.tipo = tipo
+        self.limite_mensal = limite_mensal
+        self.descricao = descricao
 
     @property
     def nome(self):
-        return self.__nome 
-    
-    @property
-    def tipo(self):
-        return self.__tipo 
-    
-    @property
-    def limite_mensal(self):
-        return self.__limite_mensal
-    
-    @property
-    def descricao(self):
-        return self.__descricao
-    
+        return self.__nome
+
     @nome.setter
     def nome(self, novo_nome):
 
         if not novo_nome or len(novo_nome.strip()) < 3:
             raise ValueError("O nome da categoria deve ter pelo menos 3 caracteres.")
         
-        self.__nome = novo_nome
+        self.__nome = novo_nome 
+    
+    @property
+    def tipo(self):
+        return self.__tipo
 
+    @tipo.setter
+    def tipo(self, novo_tipo):
+
+        if not isinstance(novo_tipo, str):
+            raise TypeError("O tipo de categoria deve ser uma string.")
+        
+        tipo_upper = novo_tipo.upper()
+
+        if tipo_upper not in ("RECEITA", "DESPESA"):
+            raise ValueError("Um categoria deve ser de \"RECEITA\" ou \"DESPESA\".")
+    
+        self.__tipo = tipo_upper
+
+    @property
+    def limite_mensal(self):
+        return self.__limite_mensal
+    
     @limite_mensal.setter
     def limite_mensal(self, novo_limite):
 
@@ -54,12 +59,37 @@ class Categoria:
                 raise ValueError("O limite mensal não pode ser negativo.")
 
         self.__limite_mensal = novo_limite
-
+    
+    @property
+    def descricao(self):
+        return self.__descricao
+    
     @descricao.setter
     def descricao(self, nova_descricao: str):
 
         if len(nova_descricao.strip()) > 100:
-            TypeError("A descrição deve ser de no máximo 100 caracteres.")
+            raise TypeError("A descrição deve ser de no máximo 100 caracteres.")
         
         self.__descricao = nova_descricao
-    
+
+    def __str__(self):
+
+        string_base = (
+            f"ID: {self.__ID_categoria} | "
+            f"Nome: {self.nome} | "
+            f"Tipo: {self.tipo} | "
+        )    
+        
+        string_limite = ""
+
+        if self.tipo == "DESPESA":
+
+            if self.limite_mensal is not None and self.limite_mensal > 0:
+                string_limite = f" | Limite mensal: R$ {self.limite_mensal:.2f}"
+
+        string_final = f" | Descrição: {self.descricao}"
+
+        return string_base + string_limite + string_final
+        
+categoria10 = Categoria(10, "Qualquer", "despesa", 600, "")
+print(categoria10)
