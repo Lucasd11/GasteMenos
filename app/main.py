@@ -1,3 +1,6 @@
+from datetime import date
+from dominio.categoria import Categoria
+from dominio.lancamento import Lancamento
 from infra.repositorio import RepositorioFinancas
 
 class ServicoControleFinancas():

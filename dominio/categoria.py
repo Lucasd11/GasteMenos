@@ -91,5 +91,3 @@ class Categoria:
 
         return string_base + string_limite + string_final
         
-categoria10 = Categoria(10, "Qualquer", "despesa", 600, "")
-print(categoria10)

@@ -35,43 +35,4 @@ class RepositorioFinancas:
 
         return obj
     
-    @classmethod
-    def salvar_categorias(cls, lista_categorias):
-        """
-        Salva a lista de objetos Categoria no arquivo JSON.
-        """
-
-        data_to_save = [cls._to_dict(c) for c in lista_categorias]
-
-        with open(cls.CATEGORIAS_FILE, 'w', encoding = 'utf-8') as f: # Escreve no arquivo
-            json.dump(data_to_save, f, indent = 4, default = cls._to_dict)
     
-    @classmethod
-    def carregar_categorias(cls):
-        """
-        Carrega a lista de categorias do arquivo JSON e retorna como objetos.
-        """
-
-        if not os.path.exists(cls.CATEGORIAS_FILE):
-            return [] # Retorna lista vazia se o arquivo não existir
-        
-        with open(cls.CATEGORIAS_FILE, 'r', encoding = 'utf-8') as f:
-            data = json.load(f)
-
-        categorias = []
-        for item in data:
-            try:
-                categoria = Categoria(
-                    item.get('ID_categoria', 0),
-                    item.get('nome', ''),
-                    item.get('tipo', ''),
-                    item.get('limite', None),
-                    item.get('descricao', '')
-                )
-                categorias.append(categoria)
-            except NameError:
-                # Trata o caso de Categoria não estar importada/definida
-                print("ERRO: Classe Categoria não definida para reconstrução do objeto.")
-                return []
-        
-        return categorias

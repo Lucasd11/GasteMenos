@@ -1,4 +1,4 @@
-from categoria import Categoria
+from .categoria import Categoria
 from datetime import date, datetime
 
 class Lancamento:
@@ -108,8 +108,3 @@ class Lancamento:
             (self.__data == outro.data and self.descricao == outro.descricao)
         
         return False
-
-categoria1 = Categoria(1, "Aluguel", "receita", 600, "whatever")
-lancamento1 = Lancamento(101, 500, categoria1, date.today(), "whatever", "pix")
-
-print(lancamento1)
