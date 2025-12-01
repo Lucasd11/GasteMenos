@@ -108,3 +108,4 @@ class Lancamento:
             (self.__data == outro.data and self.descricao == outro.descricao)
         
         return False
+

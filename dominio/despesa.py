@@ -15,4 +15,3 @@ class Despesa(Lancamento):
             raise TypeError("Despesa deve estar associada a uma categoria de DESPESA.")
 
 
-
