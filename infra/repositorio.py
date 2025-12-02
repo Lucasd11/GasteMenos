@@ -1,7 +1,6 @@
 import json
 import os
 from datetime import date, datetime
-# Importações absolutas das classes de domínio
 from dominio.categoria import Categoria
 from dominio.lancamento import Lancamento
 from dominio.despesa import Despesa
@@ -14,7 +13,6 @@ class RepositorioFinancas:
     Implementa o CRUD (Create, Read, Update, Delete) para Categoria e Lançamento.
     """
     
-    # Define os caminhos dos arquivos JSON
     CATEGORIAS_FILE = "categorias.json"
     LANCAMENTOS_FILE = "lancamentos.json"
 
