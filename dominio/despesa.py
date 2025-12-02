@@ -1,5 +1,5 @@
-from .lancamento import Lancamento
-from .categoria import Categoria
+from dominio.lancamento import Lancamento
+from dominio.categoria import Categoria
 from datetime import date
 
 class Despesa(Lancamento):

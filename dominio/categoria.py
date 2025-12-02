@@ -12,6 +12,10 @@ class Categoria:
         self.descricao = descricao
 
     @property
+    def ID(self):
+        return self.__ID_categoria
+
+    @property
     def nome(self):
         return self.__nome
 

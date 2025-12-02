@@ -1,4 +1,4 @@
-from .categoria import Categoria
+from dominio.categoria import Categoria
 from datetime import date, datetime
 
 class Lancamento:
@@ -15,6 +15,10 @@ class Lancamento:
         self.descricao = descricao
         self.forma_pagmto = forma_pagmto
         
+    @property
+    def ID(self):
+        return self.__ID_lancamento
+    
     @property
     def valor(self):
         return self.__valor
@@ -100,12 +104,3 @@ class Lancamento:
             f"Data: {data_formatada} | "
             f"Forma de pagamento: {self.forma_pagmto}"
         )
-
-    def __eq__(self, outro):
-        # Comparação por ID ou data + descrição
-        if isinstance(outro, Lancamento):
-            return self.__ID_lancamento == outro.__ID_lancamento or \
-            (self.__data == outro.data and self.descricao == outro.descricao)
-        
-        return False
-
