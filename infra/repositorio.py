@@ -26,19 +26,13 @@ class RepositorioFinancas:
         Converte um objeto Categoria, Lançamento ou Date em um dicionário/string.
         Método 'default' para o json.dump, lidando com objetos customizados.
         """
-        # 1. Trata objetos Date/Datetime
         if isinstance(obj, date):
             return obj.isoformat()
         
-        # 2. Trata objetos customizados (Categoria, Lancamento, etc.)
         if hasattr(obj, '__dict__'):
             data = {}
 
             for key, value in obj.__dict__.items():
-                # Remove o prefixo privado (__NomeClasse__atributo)
-                # Acessa a chave do dicionário de atributos (__dict__)
-                
-                # Adaptação segura para o padrão __atributo
                 new_key = key.split('_')[-1]
                 data[new_key] = RepositorioFinancas._to_dict(value)
 
@@ -88,60 +82,60 @@ class RepositorioFinancas:
         Converte um dicionário lido do JSON para um objeto Receita ou Despesa, 
         lidando com a Herança e a desserialização de objetos aninhados.
         """
-        # 1. Desserializar Categoria aninhada
+
         if 'categoria' in data and isinstance(data['categoria'], dict):
             data['categoria'] = self._to_categoria(data['categoria'])
         
-        # 2. Desserializar Data
         if 'data' in data and isinstance(data['data'], str):
             try:
                 data['data'] = datetime.fromisoformat(data['data']).date()
             except ValueError:
                 pass 
         
-        # 3. Decisão de Herança (Polimorfismo)
-        # Verifica o tipo da Categoria para instanciar a classe correta
         if data['categoria'].tipo == "RECEITA":
             return Receita(**data)
         else:
             return Despesa(**data)
 
-
-    # --- CRUD para CATEGORIA ---
-
     def carregar_categorias(self) -> list[Categoria]:
         """ READ: Carrega a lista de categorias do disco e retorna como objetos Categoria. """
         dados_brutos = self._load_data(self.CATEGORIAS_FILE)
         return [self._to_categoria(d) for d in dados_brutos]
-
+    
     def salvar_categoria(self, categoria: Categoria):
         categorias = self.carregar_categorias()
         encontrada = False
         
-        # AGORA ACESSA O ID COM O GETTER PÚBLICO
         id_categoria_novo = categoria.ID
 
+        for cat_existente in categorias:
+            if (
+                cat_existente.nome.lower() == categoria.nome.lower()
+                and cat_existente.tipo == categoria.tipo
+                and cat_existente.ID != categoria.ID
+            ):
+                raise ValueError("Já existe uma categoria com este nome e tipo.")
+
         for i, cat_existente in enumerate(categorias):
-            # Compara o ID com o getter público
-            if cat_existente.ID == id_categoria_novo: 
-                categorias[i] = categoria 
+            if cat_existente.ID == id_categoria_novo:
+                categorias[i] = categoria
                 encontrada = True
                 break
-        
+
         if not encontrada:
             categorias.append(categoria)
 
         dados_a_salvar = [self._to_dict(c) for c in categorias]
         self._save_data(self.CATEGORIAS_FILE, dados_a_salvar)
+
         
     def remover_categoria(self, categoria_id: int):
             """ DELETE: Remove uma categoria pelo seu ID e persiste a lista completa. """
             categorias = self.carregar_categorias()
             
-            # Filtra a lista, usando o getter público 'id' para comparação
             categorias_apos_remocao = [
                 c for c in categorias 
-                if c.ID != categoria_id # <--- CORRIGIDO
+                if c.ID != categoria_id
             ]
             
             if len(categorias_apos_remocao) == len(categorias):
@@ -150,9 +144,6 @@ class RepositorioFinancas:
 
             dados_a_salvar = [self._to_dict(c) for c in categorias_apos_remocao]
             self._save_data(self.CATEGORIAS_FILE, dados_a_salvar)
-
-
-    # --- CRUD para LANÇAMENTO ---
 
     def carregar_lancamentos(self) -> list[Lancamento]:
         """ READ: Carrega a lista de lançamentos (Receitas/Despesas) do disco e retorna como objetos. """
@@ -163,11 +154,9 @@ class RepositorioFinancas:
             lancamentos = self.carregar_lancamentos()
             encontrado = False
 
-            # AGORA ACESSA O ID COM O GETTER PÚBLICO
             id_lancamento_novo = lancamento.ID
 
             for i, lanc_existente in enumerate(lancamentos):
-                # Compara o ID com o getter público
                 if lanc_existente.ID == id_lancamento_novo:
                     lancamentos[i] = lancamento
                     encontrado = True
@@ -183,10 +172,9 @@ class RepositorioFinancas:
             """ DELETE: Remove um lançamento pelo seu ID e persiste a lista completa. """
             lancamentos = self.carregar_lancamentos()
             
-            # Filtra a lista, usando o getter público 'id' para comparação
             lancamentos_apos_remocao = [
                 l for l in lancamentos 
-                if l.ID != lancamento_id # <--- CORRIGIDO
+                if l.ID != lancamento_id
             ]
             
             if len(lancamentos_apos_remocao) == len(lancamentos):

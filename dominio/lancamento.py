@@ -104,3 +104,22 @@ class Lancamento:
             f"Data: {data_formatada} | "
             f"Forma de pagamento: {self.forma_pagmto}"
         )
+    
+    def __repr__(self):
+        return f"Lancamento(id={self.ID}, valor={self.valor}, data={self.data}, descricao='{self.descricao}')"
+
+    def __eq__(self, other):
+        if not isinstance(other, Lancamento):
+            return False
+        return self.data == other.data and self.descricao == other.descricao
+
+    def __lt__(self, other):
+        if not isinstance(other, Lancamento):
+            return NotImplemented
+        return self.data < other.data
+
+    def __add__(self, other):
+        if type(self) != type(other):
+            raise TypeError("Só é possível somar lançamentos do mesmo tipo.")
+        return self.valor + other.valor
+

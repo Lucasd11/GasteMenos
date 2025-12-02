@@ -1,9 +1,0 @@
-[
-    {
-        "_Categoria__ID_categoria": 1,
-        "_Categoria__nome": "Salário",
-        "_Categoria__tipo": "RECEITA",
-        "_Categoria__limite_mensal": 0.0,
-        "_Categoria__descricao": "Renda principal"
-    }
-]

@@ -8,8 +8,9 @@ class OrcamentoMensal:
     calculando o total de receitas, total de despesas e o saldo disponível.
     """
 
-    def __init__(self, mes, prev_receita: float, lancamentos: list, meta_economia: float):
+    def __init__(self, mes, ano, prev_receita: float = 0.0, lancamentos: list = [], meta_economia: float = 0.0):
         self.mes = mes
+        self.ano = ano
         self.prev_receita = prev_receita
         self.lancamentos = lancamentos
         self.meta_economia = meta_economia
@@ -34,7 +35,6 @@ class OrcamentoMensal:
         total = 0.0
 
         for lancamento in self.lancamentos:
-            # Verifica se o lançamento é uma instância da classe Despesa
             if isinstance(lancamento, Despesa):
                 total += lancamento.valor
 
@@ -58,10 +58,8 @@ class OrcamentoMensal:
         despesas_por_categoria = defaultdict(float)
         
         for lancamento in self.lancamentos:
-            # Apenas Despesas devem entrar neste relatório
             if isinstance(lancamento, Despesa):
                 nome_categoria = lancamento.categoria.nome
                 despesas_por_categoria[nome_categoria] += lancamento.valor
                 
-        # Converte defaultdict de volta para dict para o retorno
         return dict(despesas_por_categoria)
