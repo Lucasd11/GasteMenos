@@ -1,7 +1,7 @@
 class Categoria:
     """
     Gerencia categorias de receita e despesa, definindo atributos como **nome**, 
-    **tipo** (`RECEITA` ou `DESPESA`) e o **limite mensal** (para despesas). 
+    **tipo** (RECEITA ou DESPESA) e o **limite mensal** (para despesas). 
     """
 
     def __init__(self, ID_categoria: int, nome: str, tipo: str, limite_mensal: float, descricao: str):
@@ -11,10 +11,12 @@ class Categoria:
         self.limite_mensal = limite_mensal
         self.descricao = descricao
 
+    #Getter e Setter de ID
     @property
     def ID(self):
         return self.__ID_categoria
 
+    #Getter e Setter de nome
     @property
     def nome(self):
         return self.__nome
@@ -27,6 +29,7 @@ class Categoria:
         
         self.__nome = novo_nome 
     
+    #Getter e Setter de tipo
     @property
     def tipo(self):
         return self.__tipo
@@ -44,6 +47,7 @@ class Categoria:
     
         self.__tipo = tipo_upper
 
+    #Getter e Setter de limite_mensal
     @property
     def limite_mensal(self):
         return self.__limite_mensal
@@ -64,6 +68,7 @@ class Categoria:
 
         self.__limite_mensal = novo_limite
     
+    #Getter e Setter de descricao
     @property
     def descricao(self):
         return self.__descricao
@@ -89,9 +94,9 @@ class Categoria:
         if self.tipo == "DESPESA":
 
             if self.limite_mensal is not None and self.limite_mensal > 0:
-                string_limite = f" | Limite mensal: R$ {self.limite_mensal:.2f}"
+                string_limite = f"Limite mensal: R$ {self.limite_mensal:.2f}"
 
-        string_final = f" | Descrição: {self.descricao}"
+        string_final = f"Descrição: {self.descricao}"
 
         return string_base + string_limite + string_final
         

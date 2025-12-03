@@ -2,7 +2,7 @@ from datetime import date
 from dominio.categoria import Categoria
 from dominio.lancamento import Lancamento
 from infra.repositorio import RepositorioFinancas
-from dominio.orcamentoMensal import OrcamentoMensal
+from dominio.orcamento_mensal import OrcamentoMensal
 
 class ServicoControleFinancas():
     """
@@ -13,6 +13,16 @@ class ServicoControleFinancas():
     def __init__(self, orcamentos, repositorio: RepositorioFinancas):
         self.orcamentos = orcamentos
         self.repositorio = repositorio
+
+    def criar_categoria(self):
+        
+        nova_categoria = Categoria(self, nome, tipo, limite = None, descricao = "")
+
+    def inserir_categoria(self):
+        pass
+
+    def criar_lancamento(self):
+        pass
 
     def adicionar_lancamento(self, lancamento: Lancamento):
 
@@ -39,7 +49,9 @@ class ServicoControleFinancas():
             "por_categoria": o.relatorio_despesas_por_categoria(),
         }
 
-
+class GasteMenos:
+    pass
 
 if __name__ == '__main__':
-    pass
+    app = GasteMenos()
+
