@@ -16,6 +16,7 @@ class RepositorioFinancas:
     
     CATEGORIAS_FILE = "categorias.json"
     LANCAMENTOS_FILE = "lancamentos.json"
+    ALERTAS_FILE =  "alertas.json"
 
     # --- Métodos Auxiliares de JSON (Serialização e Persistência) ---
 
@@ -100,8 +101,17 @@ class RepositorioFinancas:
         else:
             return Despesa(**data)
     
-    def _to_alerta(self):
-        pass
+    def _to_alerta(self, data: dict):
+        
+        if 'categoria' in data and isinstance(data['categoria', dict]):
+            data['categoria'] = self._to_categoria(data['categoria'])
+
+        if 'data_cricao' in data and isinstance(data['data_criacao'], str):
+            try:
+                data['data_criacao'] = datetime.fromisoformat(data['data_criacao']).date()
+            
+            except ValueError:
+                pass
 
     def carregar_categorias(self) -> list[Categoria]:
         """ READ: Carrega a lista de categorias do disco e retorna como objetos Categoria. """
@@ -189,3 +199,6 @@ class RepositorioFinancas:
 
             dados_a_salvar = [self._to_dict(l) for l in lancamentos_apos_remocao]
             self._save_data(self.LANCAMENTOS_FILE, dados_a_salvar)
+    
+    def carregar_alertas(self):
+        pass
