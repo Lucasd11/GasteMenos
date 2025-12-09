@@ -133,7 +133,6 @@ if __name__ == '__main__':
                 except ValueError:
                     print("Valor inválido. Use números.")
 
-            # 3. Coletar data (simples para CLI)
             data_hoje = date.today()
             data = data_hoje # Simplificado: usa data de hoje. Poderia pedir input formatado.
             
@@ -145,7 +144,7 @@ if __name__ == '__main__':
             # 5. Coletar detalhes
             descricao = str(input("Descrição: "))
             
-            # Opções de forma de pagamento [cite: 23]
+            # Opções de forma de pagamento
             formas_pagamento = ["dinheiro", "débito", "crédito", "PIX"]
             print("\n--- Forma de Pagamento ---")
             for i, fp in enumerate(formas_pagamento):

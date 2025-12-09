@@ -5,6 +5,7 @@ from dominio.categoria import Categoria
 from dominio.lancamento import Lancamento
 from dominio.despesa import Despesa
 from dominio.receita import Receita
+from dominio.alerta import Alerta
 
 
 class RepositorioFinancas:
@@ -98,6 +99,9 @@ class RepositorioFinancas:
             return Receita(**data)
         else:
             return Despesa(**data)
+    
+    def _to_alerta(self):
+        pass
 
     def carregar_categorias(self) -> list[Categoria]:
         """ READ: Carrega a lista de categorias do disco e retorna como objetos Categoria. """
