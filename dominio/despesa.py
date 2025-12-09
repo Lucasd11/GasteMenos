@@ -12,6 +12,7 @@ class Despesa(Lancamento):
         super().__init__(valor, categoria, data, descricao, forma_pagmto)
 
         if categoria.tipo != "DESPESA":
-            raise TypeError("Despesa deve estar associada a uma categoria de DESPESA.")
-
-
+            raise ValueError("Uma Despesa deve ser associada a uma categoria de DESPESA.")
+            
+    def __str__(self):
+        return f"[DESPESA] {super().__str__()}"

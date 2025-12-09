@@ -11,5 +11,7 @@ class Receita(Lancamento):
         super().__init__(valor, categoria, data, descricao, forma_pagmto)
 
         if categoria.tipo != "RECEITA":
-            raise TypeError("Receita deve estar associada a uma categoria de RECEITA.")
+            raise ValueError("Uma Receita deve ser associada a uma categoria de RECEITA.")
 
+    def __str__(self):
+        return f"[RECEITA] {super().__str__()}"

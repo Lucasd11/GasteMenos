@@ -9,12 +9,7 @@ class Lancamento:
     """
 
     def __init__(self, valor: float, categoria: Categoria, data: date = date.today(), descricao: str = "", forma_pagmto: str = ""):
-        
-        # 🟢 CORREÇÃO CRUCIAL: Geração automática do ID
-        # Não precisa ser passado no init, ele é gerado na criação
         self.__ID_lancamento = str(uuid.uuid4())
-        
-        # 🟢 Ordem de atribuição para garantir que setters sejam chamados
         self.categoria = categoria
         self.valor = valor
         self.data = data
