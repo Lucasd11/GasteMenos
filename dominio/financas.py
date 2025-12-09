@@ -1,6 +1,8 @@
 from infra.repositorio import RepositorioFinancas
 from dominio.categoria import Categoria
 from dominio.lancamento import Lancamento
+from dominio.receita import Receita
+from dominio.despesa import Despesa
 from dominio.orcamento_mensal import OrcamentoMensal
 
 class ServicoControleFinancas:
@@ -9,17 +11,27 @@ class ServicoControleFinancas:
     (categorias, orçamentos). Não sabe como os dados são salvos ou como o usuário interage.
     """
 
-    def __init__(self, orcamentos, repositorio: RepositorioFinancas):
+    def __init__(self, orcamentos, categorias_map, repositorio: RepositorioFinancas):
         self.orcamentos = orcamentos
+        self.categorias_map = categorias_map
         self.repositorio = repositorio
 
-    def criar_categoria(self, ID, nome, tipo, limite, descricao):
-        nova_categoria = Categoria(ID, nome, tipo, limite, descricao)
+    def criar_categoria(self, nome, tipo, limite, descricao):
+        nova_categoria = Categoria(nome, tipo, limite, descricao)
         self.repositorio.salvar_categoria(nova_categoria)
         return nova_categoria
     
-    def criar_lancamento(self, ID, valor, categoria, data, descricao, pagamento):
-        novo_lancamento = Lancamento(ID, valor, categoria, data, descricao, pagamento)
+    def registrar_lancamento(self, valor, categoria, data, descricao, pagamento):
+        
+        if categoria.tipo == "RECEITA":
+            novo_lancamento = Receita(valor, categoria, data, descricao, pagamento)
+
+        elif categoria.tipo == "DESPESA":
+            novo_lancamento = Despesa(valor, categoria, data, descricao, pagamento)
+
+        else:
+            raise ValueError("Categoria inválida.")
+
         self.adicionar_lancamento(novo_lancamento)
         return novo_lancamento
 

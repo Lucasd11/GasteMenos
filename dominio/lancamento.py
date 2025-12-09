@@ -1,22 +1,29 @@
 from dominio.categoria import Categoria
-from datetime import date, datetime
+from datetime import date
+import uuid # Necessário para gerar IDs únicos
 
 class Lancamento:
     """
     Classe base para Receitas e Despesas.
-    Garante que o ID e a Categoria sejam inicializados.
+    Garante a inicialização de atributos comuns e implementa métodos especiais e validações.
     """
 
-    def __init__(self, ID_lancamento: int, valor: float, categoria: Categoria, data: date = date.today(), descricao: str = "", forma_pagmto: str = ""):
-        self.__ID_lancamento = ID_lancamento
-        self.valor = valor
+    def __init__(self, valor: float, categoria: Categoria, data: date = date.today(), descricao: str = "", forma_pagmto: str = ""):
+        
+        # 🟢 CORREÇÃO CRUCIAL: Geração automática do ID
+        # Não precisa ser passado no init, ele é gerado na criação
+        self.__ID_lancamento = str(uuid.uuid4())
+        
+        # 🟢 Ordem de atribuição para garantir que setters sejam chamados
         self.categoria = categoria
+        self.valor = valor
         self.data = data
         self.descricao = descricao
         self.forma_pagmto = forma_pagmto
         
     @property
     def ID(self):
+        # O ID deve ser somente leitura
         return self.__ID_lancamento
     
     @property
@@ -29,7 +36,9 @@ class Lancamento:
         if not isinstance(novo_valor, (int, float)):
             raise TypeError("O valor deve ser um número.")
         
-        elif novo_valor <= 0:
+
+        if novo_valor <= 0:
+
             raise ValueError("O valor deve ser positivo e maior que zero.")
 
         self.__valor = float(novo_valor)
@@ -42,7 +51,7 @@ class Lancamento:
     def categoria(self, nova_categoria):
 
         if not isinstance(nova_categoria, Categoria):
-            raise TypeError("A categoria de um Lançamento deve ser um objeto da classe Categoria")
+            raise TypeError("A categoria de um Lançamento deve ser um objeto da classe Categoria.")
         
         self.__categoria = nova_categoria
 
@@ -64,15 +73,20 @@ class Lancamento:
     
     @descricao.setter
     def descricao(self, nova_descricao: str):
-
-        if len(nova_descricao) < 1:
-            TypeError("Digite algum tipo de descrição!")
         
-        elif len(nova_descricao) > 100:
-            TypeError("A descrição deve ter, no máximo, 100 dígitos.")
+        if not isinstance(nova_descricao, str):
+            raise TypeError("A descrição deve ser uma string.")
 
-        else:
-            self.__descricao = nova_descricao
+
+        descricao_limpa = nova_descricao.strip()
+        
+        if len(descricao_limpa) < 1:
+            raise ValueError("A descrição não pode ser vazia.")
+        
+        elif len(descricao_limpa) > 100:
+            raise ValueError("A descrição deve ter, no máximo, 100 dígitos.")
+
+        self.__descricao = descricao_limpa
     
     @property
     def forma_pagmto(self):
@@ -91,35 +105,56 @@ class Lancamento:
         if forma_upper not in metodos_pagamento:
             raise ValueError("Forma de pagamento desconhecida.")
         
-        self.__forma_pagmto = nova_forma.upper()
+        self.__forma_pagmto = forma_upper
 
+
+    @property
+    def tipo(self):
+        """Retorna o tipo de lançamento baseado na categoria."""
+        return self.categoria.tipo # Retorna "RECEITA" ou "DESPESA"
+
+    # --- Métodos Especiais ---
+    
     def __str__(self):
-
+        """Método __str__: resumo de lançamento."""
         data_formatada = self.data.strftime("%d/%m/%Y")
 
         return (
-            f"ID: {self.__ID_lancamento} | "
-            f"Categoria: {self.categoria.nome} | "
-            f"Valor: R$ {self.valor:.2f} | "
-            f"Data: {data_formatada} | "
-            f"Forma de pagamento: {self.forma_pagmto}"
+            f"ID: {self.ID} | Tipo: {self.tipo} | Categoria: {self.categoria.nome} | "
+            f"Valor: R$ {self.valor:.2f} | Data: {data_formatada}"
         )
     
     def __repr__(self):
-        return f"Lancamento(id={self.ID}, valor={self.valor}, data={self.data}, descricao='{self.descricao}')"
+        """Método __repr__: detalhamento interno."""
+        return (
+            f"Lancamento(id='{self.ID}', valor={self.valor}, "
+            f"categoria='{self.categoria.nome}', data={self.data})"
+        )
 
     def __eq__(self, other):
+        """Método __eq__: comparação por ID ou data + descrição."""
         if not isinstance(other, Lancamento):
-            return False
+            return NotImplemented
+        
+
+        if self.ID == other.ID:
+             return True
+             
+
         return self.data == other.data and self.descricao == other.descricao
 
     def __lt__(self, other):
+        """Método __lt__: ordenação por data ou valor."""
         if not isinstance(other, Lancamento):
             return NotImplemented
-        return self.data < other.data
+
+        if self.data != other.data:
+            return self.data < other.data
+        return self.valor < other.valor
 
     def __add__(self, other):
-        if type(self) != type(other):
-            raise TypeError("Só é possível somar lançamentos do mesmo tipo.")
-        return self.valor + other.valor
+        """Método __add__: somar receitas/despesas (mesmo tipo).""" 
 
+        if type(self) != type(other):
+            raise TypeError("Só é possível somar lançamentos do mesmo tipo (Receita ou Despesa).")
+        return self.valor + other.valor
