@@ -8,58 +8,39 @@ class OrcamentoMensal:
     calculando o total de receitas, total de despesas e o saldo disponível.
     """
 
-    def __init__(self, mes, ano, prev_receita: float = 0.0, lancamentos: list = [], meta_economia: float = 0.0):
-        self.mes = mes
+    def __init__(self, ano, mes, prev_receita=0.0, lancamentos=None, meta_economia=0.0):
         self.ano = ano
+        self.mes = mes
         self.prev_receita = prev_receita
-        self.lancamentos = lancamentos
+        self.lancamentos = lancamentos or []
         self.meta_economia = meta_economia
 
+    def inserir_lancamento(self, lancamento):
+        self.lancamentos.append(lancamento)
+
     def calcular_total_receitas(self):
-        """
-        Calcula o total de todas as Receitas no mês.
-        """
         total = 0.0
-
         for lancamento in self.lancamentos:
-
             if isinstance(lancamento, Receita):
                 total += lancamento.valor
-        
         return total
 
     def calcular_total_despesas(self):
-        """
-        Calcula o total de todas as Despesas no mês.
-        """
         total = 0.0
-
         for lancamento in self.lancamentos:
             if isinstance(lancamento, Despesa):
                 total += lancamento.valor
-
-        return total    
+        return total
 
     def calcular_saldo_mensal(self):
-        """
-        Calcula o saldo mensal.
-        """
         receitas = self.calcular_total_receitas()
         despesas = self.calcular_total_despesas()
-        saldo = receitas - despesas
-
-        return saldo
+        return receitas - despesas
 
     def relatorio_despesas_por_categoria(self):
-        """
-        Retorna um dicionário com o total de despesas agrupado por nome da Categoria.
-        Exemplo: {'Alimentação': 500.0, 'Transporte': 200.0}
-        """
         despesas_por_categoria = defaultdict(float)
-        
         for lancamento in self.lancamentos:
             if isinstance(lancamento, Despesa):
                 nome_categoria = lancamento.categoria.nome
                 despesas_por_categoria[nome_categoria] += lancamento.valor
-                
         return dict(despesas_por_categoria)

@@ -1,57 +1,52 @@
-from datetime import date
-from dominio.categoria import Categoria
-from dominio.lancamento import Lancamento
 from infra.repositorio import RepositorioFinancas
 from dominio.orcamento_mensal import OrcamentoMensal
-
-class ServicoControleFinancas():
-    """
-        Coordena as ações, aplica lógica de negócio e gerencia o estado dos objetos
-        (categorias, orçamentos). Não sabe como os dados são salvos ou como o usuário interage.
-        """
-
-    def __init__(self, orcamentos, repositorio: RepositorioFinancas):
-        self.orcamentos = orcamentos
-        self.repositorio = repositorio
-
-    def criar_categoria(self):
-        
-        nova_categoria = Categoria(self, nome, tipo, limite = None, descricao = "")
-
-    def inserir_categoria(self):
-        pass
-
-    def criar_lancamento(self):
-        pass
-
-    def adicionar_lancamento(self, lancamento: Lancamento):
-
-        chave_mes = lancamento.data.strftime("%Y-%m")
-        if chave_mes not in self.orcamentos:
-            self.orcamentos[chave_mes] = OrcamentoMensal(
-                ano = lancamento.data.year,
-                mes = lancamento.data.month
-            )
-
-        self.orcamentos[chave_mes].adicionar_lancamento(lancamento)
-
-        self.repositorio.salvar_lancamento(lancamento)
-    
-    def relatorio_mensal(self, ano: int, mes: int):
-        chave = f"{ano}-{mes:02d}"
-        if chave not in self.orcamentos:
-            raise ValueError("Nenhum orçamento encontrado para este mês.")
-        o = self.orcamentos[chave]
-        return {
-            "total_receitas": o.calcular_total_receitas(),
-            "total_despesas": o.calcular_total_despesas(),
-            "saldo": o.calcular_saldo(),
-            "por_categoria": o.relatorio_despesas_por_categoria(),
-        }
-
-class GasteMenos:
-    pass
+from dominio.financas import ServicoControleFinancas
+from datetime import date
 
 if __name__ == '__main__':
-    app = GasteMenos()
+    
+    repo = RepositorioFinancas()
+    categorias = repo.carregar_categorias()
+    lancamentos = repo.carregar_lancamentos()
+
+    orcamentos = {}
+    for i in lancamentos:
+        chave = i.data.strftime("%Y-%m")
+        if chave not in orcamentos:
+            orcamentos[chave] = OrcamentoMensal(i.data.year, i.data.month)
+        orcamentos[chave].inserir_lancamento(i)
+
+    servico = ServicoControleFinancas(orcamentos, repo)
+
+    while True:
+        print("==========GasteMenos==========\n"
+              "Criar categoria - 1\n"
+              "Inserir lançamento - 2"
+              )
+        
+        opcao = int(input("Opção: "))
+
+        if opcao == 1:
+
+            print("==========Nova Categoria==========\n")
+            nome = str(input("Nome: "))
+            tipo = int(input("Receita - 1\n"
+                             "Despesa - 2\n"
+                             "Tipo: "
+                             ))
+            if tipo == 2:
+                limite = float(input("Limite mensal: "))
+            
+            descricao = str(input("Descrição: "))
+
+            if tipo == 1:
+                tipo = str(tipo)
+                tipo = "RECEITA"
+            
+            elif tipo == 2:
+                tipo = str(tipo)
+                tipo = "DESPESA"
+            
+
+            servico.criar_categoria(1, nome, tipo, limite, descricao)
 

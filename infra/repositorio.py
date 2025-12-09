@@ -69,11 +69,15 @@ class RepositorioFinancas:
 
     # --- Métodos de Desserialização (Dict -> Objeto) ---
 
-    def _to_categoria(self, data: dict) -> Categoria:
-        """
-        Converte um dicionário lido do JSON para um objeto Categoria.
-        """
-        return Categoria(**data)
+    def _to_categoria(self, data):
+        return Categoria(
+            ID_categoria=data["categoria"],
+            nome=data["nome"],
+            tipo=data["tipo"],
+            limite_mensal=data["limite_mensal"],
+            descricao=data["descricao"]
+        )
+
 
     def _to_lancamento(self, data: dict) -> Lancamento:
         """
