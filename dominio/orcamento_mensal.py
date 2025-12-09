@@ -78,9 +78,7 @@ class OrcamentoMensal:
         
     def verificar_limite_categoria(self, categoria_id: str) -> Dict[str, float]:
         """
-        🚨 IMPLEMENTAÇÃO FALTANTE DA SEMANA 4.
         Verifica se o total acumulado de despesas em uma categoria excedeu o limite.
-        
         Retorna: Um dicionário com o total gasto e o limite, ou um dicionário vazio se não for excedido.
         """
         
