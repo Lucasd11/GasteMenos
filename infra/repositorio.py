@@ -200,5 +200,10 @@ class RepositorioFinancas:
             dados_a_salvar = [self._to_dict(l) for l in lancamentos_apos_remocao]
             self._save_data(self.LANCAMENTOS_FILE, dados_a_salvar)
     
-    def carregar_alertas(self):
+    def carregar_alertas(self) -> list:
+        
+        dados_brutos = self._load_data(self.ALERTAS_FILE)
+        return [self._to_alerta(d) for d in dados_brutos]
+
+    def salvar_alertas():
         pass

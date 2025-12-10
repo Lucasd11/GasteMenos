@@ -1,5 +1,5 @@
 import uuid
-import numbers # Usar numbers.Number é mais robusto para tipos numéricos
+import numbers 
 
 class Categoria:
     """

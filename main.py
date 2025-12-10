@@ -3,9 +3,7 @@ from dominio.orcamento_mensal import OrcamentoMensal
 from dominio.financas import ServicoControleFinancas
 from datetime import date
 
-# -----------------
-# Função Auxiliar para CLI
-# -----------------
+
 def listar_categorias_e_obter_escolha(categorias_disponiveis, tipo_lancamento):
     """Filtra e lista categorias e retorna a categoria escolhida."""
     print(f"\n--- Categorias de {tipo_lancamento} ---")
@@ -35,9 +33,6 @@ def listar_categorias_e_obter_escolha(categorias_disponiveis, tipo_lancamento):
         except ValueError:
             print("Entrada inválida. Digite um número.")
 
-# -----------------
-# Início da Main
-# -----------------
 if __name__ == '__main__':
     
     repo = RepositorioFinancas()
@@ -55,7 +50,7 @@ if __name__ == '__main__':
     servico = ServicoControleFinancas(orcamentos, categorias_map, repo)
 
     while True:
-        print("\n==========GasteMenos (Semana 4) ==========\n"
+        print("\n==========GasteMenos==========\n"
               "Criar categoria - 1\n"
               "Inserir lançamento - 2\n"
               "Ver Relatório Mensal - 3\n"
@@ -78,7 +73,7 @@ if __name__ == '__main__':
             
             # Garante que o tipo seja "RECEITA" ou "DESPESA"
             while True:
-                tipo_input = input("Receita - 1\nDespesa - 2\nTipo: ")
+                tipo_input = input(" | Receita - 1 |\n | Despesa - 2 |\nTipo: ")
                 if tipo_input == '1':
                     tipo = "RECEITA"
                     limite = 0.0 
@@ -105,9 +100,6 @@ if __name__ == '__main__':
                 print(f"Erro ao criar categoria: {e}")
 
         
-        # -----------------
-        # Opção 2: Inserir Lançamento
-        # -----------------
         elif opcao == 2:
             print("==========Novo Lançamento==========\n")
             
@@ -179,9 +171,7 @@ if __name__ == '__main__':
             except Exception as e:
                 print(f"Erro ao registrar lançamento: {e}")
 
-        # -----------------
-        # Opção 3: Relatório Mensal (Integração)
-        # -----------------
+
         elif opcao == 3:
 
             hoje = date.today()

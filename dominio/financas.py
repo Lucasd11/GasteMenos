@@ -12,7 +12,7 @@ class ServicoControleFinancas:
     (categorias, orçamentos). Não sabe como os dados são salvos ou como o usuário interage.
     """
 
-    # Valor limite para alerta de alto valor (Regra de Negócio 5)
+
     LIMITE_ALTO_VALOR = 500.00 
 
     def __init__(self, orcamentos, categorias_map, repositorio: RepositorioFinancas):
