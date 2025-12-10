@@ -7,7 +7,7 @@ class Categoria:
     **tipo** (RECEITA ou DESPESA) e o **limite mensal** (para despesas). 
     """
 
-    def __init__(self, nome: str, tipo: str, limite_mensal: float = 0.0, descricao: str = ""):
+    def __init__(self, ID_categoria, nome: str, tipo: str, limite_mensal: float = 0.0, descricao: str = ""):
         self.__ID_categoria = str(uuid.uuid4())
         self.tipo = tipo 
         self.nome = nome

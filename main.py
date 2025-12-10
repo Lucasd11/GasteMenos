@@ -126,7 +126,7 @@ if __name__ == '__main__':
                     print("Valor inválido. Use números.")
 
             data_hoje = date.today()
-            data = data_hoje # Simplificado: usa data de hoje. Poderia pedir input formatado.
+            data = data_hoje
             
             # 4. Selecionar Categoria
             categoria_escolhida = listar_categorias_e_obter_escolha(categorias_map, tipo_lancamento)
@@ -156,7 +156,7 @@ if __name__ == '__main__':
             try:
 
                 servico.registrar_lancamento(
-                    tipo_lancamento, valor, data, categoria_escolhida, descricao, forma_pagamento
+                    valor, categoria_escolhida, data, descricao, forma_pagamento
                 )
                 print(f"\n--- Lançamento de {tipo_lancamento} registrado com sucesso! ---")
                 

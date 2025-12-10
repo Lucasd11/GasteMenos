@@ -1,3 +1,4 @@
+from dominio.lancamento import Lancamento
 from dominio.receita import Receita
 from dominio.despesa import Despesa
 from collections import defaultdict
@@ -10,7 +11,7 @@ class OrcamentoMensal:
     Também verifica o excesso de limite das categorias.
     """
 
-    def __init__(self, ano: int, mes: int, prev_receita: float = 0.0, lancamentos: List[Union[Receita, Despesa]] = None, meta_economia: float = 0.0):
+    def __init__(self, ano: int, mes: int, prev_receita: float = 0.0, lancamentos: list[Lancamento] | None = None, meta_economia: float = 0.0):
         self.__ano = ano
         self.__mes = mes
         self.__prev_receita = prev_receita
@@ -19,7 +20,7 @@ class OrcamentoMensal:
 
     # --- Métodos de Controle ---
     
-    def inserir_lancamento(self, lancamento: Union[Receita, Despesa]):
+    def inserir_lancamento(self, lancamento: Lancamento):
         """Adiciona um lançamento à lista do orçamento."""
         self.__lancamentos.append(lancamento)
 
@@ -76,32 +77,28 @@ class OrcamentoMensal:
                  
         return relatorio
         
-    def verificar_limite_categoria(self, categoria_id: str) -> Dict[str, float]:
+    def verificar_limite_categoria(self, categoria_id: str) -> Dict[str, Union[str, float]]:
         """
         Verifica se o total acumulado de despesas em uma categoria excedeu o limite.
         Retorna: Um dicionário com o total gasto e o limite, ou um dicionário vazio se não for excedido.
         """
         
-        # 1. Obter o total gasto acumulado para a categoria
         despesas_acumuladas = self._agrupar_despesas_por_categoria()
         gasto_total = despesas_acumuladas.get(categoria_id, 0.0)
         
-        # 2. Encontrar a Categoria (precisamos iterar sobre os lançamentos para achar o objeto Categoria)
         categoria_obj = None
         for lancamento in self.__lancamentos:
             if lancamento.categoria.ID == categoria_id:
                 categoria_obj = lancamento.categoria
                 break
         
-        # Se a categoria não for encontrada ou não for de despesa, não há verificação de limite
         if categoria_obj is None or categoria_obj.tipo != "DESPESA":
              return {}
              
         limite = categoria_obj.limite_mensal
         
-        # 3. Comparar
         if limite > 0 and gasto_total > limite:
-            # Limite excedido! O ServicoControleFinancas usará esta informação para gerar um Alerta.
+
             return {
                 "categoria_nome": categoria_obj.nome,
                 "limite": limite,

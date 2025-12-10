@@ -72,12 +72,14 @@ class RepositorioFinancas:
     # --- Métodos de Desserialização (Dict -> Objeto) ---
 
     def _to_categoria(self, data):
+
+        categoria_id = data.get("ID")
         return Categoria(
-            ID_categoria=data["categoria"],
-            nome=data["nome"],
-            tipo=data["tipo"],
-            limite_mensal=data["limite_mensal"],
-            descricao=data["descricao"]
+            ID_categoria = categoria_id,
+            nome = data["nome"],
+            tipo = data["tipo"],
+            limite_mensal = data["limite_mensal"],
+            descricao = data["descricao"]
         )
 
 
@@ -103,7 +105,7 @@ class RepositorioFinancas:
     
     def _to_alerta(self, data: dict):
         
-        if 'categoria' in data and isinstance(data['categoria', dict]):
+        if 'categoria' in data and isinstance(data['categoria'], dict):
             data['categoria'] = self._to_categoria(data['categoria'])
 
         if 'data_cricao' in data and isinstance(data['data_criacao'], str):
@@ -205,5 +207,12 @@ class RepositorioFinancas:
         dados_brutos = self._load_data(self.ALERTAS_FILE)
         return [self._to_alerta(d) for d in dados_brutos]
 
-    def salvar_alertas():
-        pass
+    def salvar_alerta(self, alerta: Alerta):
+        """ 
+        CREATE: Adiciona um novo Alerta à lista e persiste o arquivo completo. 
+        Alertas são registros de histórico e, portanto, apenas adicionados.
+        """
+        alertas = self.carregar_alertas()
+        alertas.append(alerta)
+        dados_a_salvar = [self._to_dict(a) for a in alertas]
+        self._save_data(self.ALERTAS_FILE, dados_a_salvar)
