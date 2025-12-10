@@ -73,13 +73,17 @@ if __name__ == '__main__':
             
             # Garante que o tipo seja "RECEITA" ou "DESPESA"
             while True:
-                tipo_input = input(" | Receita - 1 |\n | Despesa - 2 |\nTipo: ")
-                if tipo_input == '1':
-                    tipo = "RECEITA"
+                tipo_input = int(input(" | Receita - 1 |\n"
+                                   " | Despesa - 2 |\n" 
+                                   " | Tipo: "
+                                    ))
+                
+                if tipo_input == 1:
+                    tipo: str = "RECEITA"
                     limite = 0.0 
                     break
-                elif tipo_input == '2':
-                    tipo = "DESPESA"
+                elif tipo_input == 2:
+                    tipo: str = "DESPESA"
                     while True:
                         try:
                             limite = float(input("Limite mensal (0 para sem limite): "))

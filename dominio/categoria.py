@@ -1,5 +1,6 @@
 import uuid
 import numbers 
+from typing import Optional
 
 class Categoria:
     """
@@ -7,18 +8,22 @@ class Categoria:
     **tipo** (RECEITA ou DESPESA) e o **limite mensal** (para despesas). 
     """
 
-    def __init__(self, ID_categoria, nome: str, tipo: str, limite_mensal: float = 0.0, descricao: str = ""):
-        self.__ID_categoria = str(uuid.uuid4())
+    def __init__(self, nome: str, tipo: str, limite_mensal: float = 0.0, descricao: str = "",  ID_categoria: Optional[str] = None):
         self.tipo = tipo 
         self.nome = nome
         self.descricao = descricao
         self.limite_mensal = limite_mensal
 
+        if ID_categoria is None:
+            self.__id = str(uuid.uuid4())
+        else:
+            self.__id = ID_categoria
+
 
     # Getter de ID (não deve ter setter)
     @property
     def ID(self):
-        return self.__ID_categoria
+        return self.__id
 
     # Getter e Setter de nome
     @property
@@ -44,7 +49,7 @@ class Categoria:
         
         tipo_upper = novo_tipo.upper()
 
-        if tipo_upper not in ("RECEITA", "DESPESA"):
+        if tipo_upper not in ["RECEITA", "DESPESA"]:
             raise ValueError("Uma categoria deve ser de 'RECEITA' ou 'DESPESA'.")
     
         self.__tipo = tipo_upper

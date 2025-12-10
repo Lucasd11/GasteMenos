@@ -22,7 +22,7 @@ class ServicoControleFinancas:
 
     # --- Métodos de CRUD Básico ---
     
-    def criar_categoria(self, nome, tipo, limite, descricao):
+    def criar_categoria(self, nome: str, tipo: str, limite: float, descricao: str):
         nova_categoria = Categoria(nome, tipo, limite, descricao)
         self.categorias_map[nova_categoria.ID] = nova_categoria
         self.repositorio.salvar_categoria(nova_categoria)
