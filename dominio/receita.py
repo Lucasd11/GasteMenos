@@ -7,11 +7,9 @@ class Receita(Lancamento):
     """
 
     def __init__(self, valor: float, categoria: Categoria, data, descricao: str, forma_pagmto: str):
-
+        if categoria.get_tipo() != "RECEITA":
+            raise ValueError("Receita deve usar categoria do tipo RECEITA.")
         super().__init__(valor, categoria, data, descricao, forma_pagmto)
-
-        if categoria.tipo != "RECEITA":
-            raise ValueError("Uma Receita deve ser associada a uma categoria de RECEITA.")
 
     def __str__(self):
         return f"[RECEITA] {super().__str__()}"
