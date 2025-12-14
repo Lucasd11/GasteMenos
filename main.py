@@ -10,6 +10,7 @@ def menu():
     print("4 - Adicionar despesa")
     print("5 - Ver saldo do mês")
     print("6 - Listar alertas")
+    print("7 - Relatórios")
     print("0 - Sair")
 
 
@@ -66,8 +67,9 @@ def main():
                 categoria = escolher_categoria(financas, "RECEITA")
                 if categoria:
                     valor = float(input("Valor da receita: "))
+                    forma_de_pagamento = input("Forma de pagamento: ").upper()
                     descricao = input("Descrição: ")
-                    financas.adicionar_receita(valor, categoria, date.today(), descricao)
+                    financas.adicionar_receita(valor, categoria, date.today(), descricao, forma_de_pagamento)
                     print("Receita adicionada!")
 
             # ---------- DESPESA ----------
@@ -75,8 +77,9 @@ def main():
                 categoria = escolher_categoria(financas, "DESPESA")
                 if categoria:
                     valor = float(input("Valor da despesa: "))
+                    forma_de_pagamento = input("Forma de pagamento: ").upper()
                     descricao = input("Descrição: ")
-                    financas.adicionar_despesa(valor, categoria, date.today(), descricao)
+                    financas.adicionar_despesa(valor, categoria, date.today(), descricao, forma_de_pagamento)
                     print("Despesa adicionada!")
 
             # ---------- SALDO ----------
@@ -93,6 +96,28 @@ def main():
                     print("\nAlertas:")
                     for a in alertas:
                         print(f"- {a}")
+            
+            elif opcao == "7":
+                print("\nRELATÓRIOS")
+
+                print("\nDespesas por categoria:")
+                for cat, valor in financas._orcamento.relatorio_despesas_por_categoria().items():
+                    print(f"- {cat}: R$ {valor:.2f}")
+
+                print("\nDespesas por forma de pagamento:")
+                for forma, valor in financas._orcamento.relatorio_despesas_por_forma_pagamento().items():
+                    print(f"- {forma}: R$ {valor:.2f}")
+
+                print("\nPercentual por categoria:")
+                for cat, perc in financas._orcamento.relatorio_percentual_por_categoria().items():
+                    print(f"- {cat}: {perc:.2f}%")
+
+                comp = financas.relatorio_comparativo()
+                print("\nComparativo mensal:")
+                print(f"Receitas: R$ {comp['total_receitas']:.2f}")
+                print(f"Despesas: R$ {comp['total_despesas']:.2f}")
+                print(f"Saldo: R$ {comp['saldo']:.2f}")
+            
 
             elif opcao == "0":
                 print("Saindo...")

@@ -110,3 +110,43 @@ class OrcamentoMensal:
             }
 
         return {}
+
+    def relatorio_despesas_por_forma_pagamento(self):
+        """
+        Retorna o total de despesas agrupadas por forma de pagamento.
+        """
+        resultado = defaultdict(float)
+
+        for lancamento in self.__lancamentos:
+            if isinstance(lancamento, Despesa):
+                resultado[lancamento.forma_pagmto] += lancamento.valor
+
+        return dict(resultado)
+
+    def relatorio_percentual_por_categoria(self):
+        """
+        Retorna o percentual de cada categoria em relação ao total de despesas.
+        """
+        total_despesas = self.calcular_total_despesas()
+        if total_despesas == 0:
+            return {}
+
+        despesas_por_categoria = self.relatorio_despesas_por_categoria()
+        percentual = {}
+
+        for categoria, valor in despesas_por_categoria.items():
+            percentual[categoria] = (valor / total_despesas) * 100
+
+        return percentual
+    
+    def calcular_saldo_diario(self):
+        saldo_por_dia = defaultdict(float)
+
+        for lanc in self.__lancamentos:
+            if isinstance(lanc, Receita):
+                saldo_por_dia[lanc.data] += lanc.valor
+            elif isinstance(lanc, Despesa):
+                saldo_por_dia[lanc.data] -= lanc.valor
+
+        return dict(saldo_por_dia)
+
