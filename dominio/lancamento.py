@@ -74,7 +74,7 @@ class Lancamento:
 
     @forma_pagmto.setter
     def forma_pagmto(self, nova_forma):
-        metodos = ["DINHEIRO", "DÉBITO", "CRÉDITO", "PIX", "TRANSFERÊNCIA"]
+        metodos = ["DINHEIRO", "DEBITO", "CREDITO", "PIX", "TRANSFERENCIA"]
         if not isinstance(nova_forma, str):
             raise TypeError("Forma de pagamento inválida.")
         forma = nova_forma.upper()

@@ -7,7 +7,7 @@ from infra.repositorio import RepositorioFinancas
 from dominio.settings import Configuracoes
 from datetime import date
 from collections import defaultdict
-
+from typing import Optional
 
 
 class Financas:
@@ -17,11 +17,14 @@ class Financas:
 
     def __init__(self, ano=None, mes=None):
         self._repo = RepositorioFinancas()
+        self._config = Configuracoes()
+
         hoje = date.today()
         self._orcamento = OrcamentoMensal(
             ano or hoje.year,
             mes or hoje.month
         )
+
         self._alertas = []
 
     # ---------- CATEGORIAS ----------
@@ -46,7 +49,7 @@ class Financas:
 
     # ---------- LANÇAMENTOS ----------
 
-    def adicionar_receita(self, valor, categoria, data_lanc=None, descricao = "", forma_pagmto = ""):
+    def adicionar_receita(self, valor, categoria, data_lanc=None, descricao="", forma_pagmto=""):
         receita = Receita(
             valor,
             categoria,
@@ -57,10 +60,9 @@ class Financas:
 
         self._orcamento.inserir_lancamento(receita)
         self._repo.salvar_lancamento(receita)
-
         return receita
 
-    def adicionar_despesa(self, valor, categoria, data_lanc = None, descricao = "", forma_pagmto = ""):
+    def adicionar_despesa(self, valor, categoria, data_lanc=None, descricao="", forma_pagmto=""):
         despesa = Despesa(
             valor,
             categoria,
@@ -73,7 +75,6 @@ class Financas:
         self._repo.salvar_lancamento(despesa)
 
         if valor > self._config.alerta_alto_valor():
-
             self._alertas.append(
                 Alerta(
                     Alerta.TIPO_ALTO_VALOR,
@@ -100,38 +101,47 @@ class Financas:
             )
 
         return despesa
-    
+
+    # ---------- SALDO ----------
+
+    def calcular_saldo_mensal(self):
+        return self._orcamento.calcular_saldo()
+
+    # ---------- ALERTAS ----------
+
+    def listar_alertas(self):
+        return self._alertas
+
+    # ---------- RELATÓRIOS (DELEGAÇÃO) ----------
+
+    def relatorio_despesas_por_categoria(self):
+        return self._orcamento.relatorio_despesas_por_categoria()
+
+    def relatorio_despesas_por_forma_pagamento(self):
+        return self._orcamento.relatorio_despesas_por_forma_pagamento()
+
+    def relatorio_percentual_por_categoria(self):
+        return self._orcamento.relatorio_percentual_por_categoria()
+
     def relatorio_comparativo(self):
-        """
-        Retorna um comparativo simples entre receitas e despesas do mês atual.
-        """
         return {
             "total_receitas": self._orcamento.calcular_total_receitas(),
             "total_despesas": self._orcamento.calcular_total_despesas(),
             "saldo": self._orcamento.calcular_saldo()
         }
-    
 
-    # ---------- CONSULTAS ----------
-
-    def obter_saldo(self):
-        return self._orcamento.calcular_saldo()
-
-    def listar_alertas(self):
-        return self._alertas
-    
-    def editar_categoria(self, categoria: Categoria):
-        self._repo.atualizar_categoria(categoria)
-
-    def excluir_categoria(self, categoria_id: str):
-        self._repo.excluir_categoria(categoria_id)
+    # ---------- ESTATÍSTICAS ----------
 
     def mes_mais_economico(self):
         totais = self._repo.total_despesas_por_mes()
+
         if not totais:
             return None
-        return min(totais, key=totais.get)
 
+        return min(totais, key=lambda k: totais[k])
+
+
+    
     def comparativo_ultimos_meses(self, meses=3):
         dados = self._repo._load_data(self._repo.LANCAMENTOS_FILE)
         resultado = defaultdict(lambda: {"receitas": 0, "despesas": 0})
@@ -145,4 +155,3 @@ class Financas:
 
         meses_ordenados = sorted(resultado.keys(), reverse=True)[:meses]
         return {m: resultado[m] for m in meses_ordenados}
-

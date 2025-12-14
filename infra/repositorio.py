@@ -153,7 +153,7 @@ class RepositorioFinancas:
 
         for d in dados:
             if d["tipo"] == "DESPESA":
-                mes = d["data"][:7]  # YYYY-MM
+                mes = d["data"][:7]
                 totais[mes] += d["valor"]
 
         return dict(totais)
