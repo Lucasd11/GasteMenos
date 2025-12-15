@@ -21,3 +21,129 @@ A arquitetura do projeto é baseada em classes bem definidas, com foco na heran�
 
 <img width="765" height="694" alt="image" src="https://github.com/user-attachments/assets/7650aedb-45f1-41fc-89da-52a9348844da" />
 
+Explicação das Principais Classes
+🔹 Categoria
+
+Representa uma categoria financeira.
+
+Atributos:
+
+nome
+
+tipo (RECEITA ou DESPESA)
+
+limite_mensal
+
+descrição
+
+Responsabilidade:
+
+Definir e validar categorias
+
+🔹 Lancamento (classe base)
+
+Classe abstrata que representa um lançamento financeiro.
+
+Atributos:
+
+valor
+
+categoria
+
+data
+
+descrição
+
+forma de pagamento
+
+Responsabilidade:
+
+Garantir validações comuns a receitas e despesas
+
+🔹 Receita
+
+Especialização de Lancamento.
+
+Responsabilidade:
+
+Representar entradas de dinheiro
+
+🔹 Despesa
+
+Especialização de Lancamento.
+
+Responsabilidade:
+
+Representar saídas de dinheiro
+
+Disparar regras de alerta
+
+🔹 OrcamentoMensal
+
+Responsável por agrupar lançamentos de um mês específico.
+
+Responsabilidades:
+
+Calcular totais
+
+Calcular saldo
+
+Gerar relatórios
+
+Verificar limites por categoria
+
+🔹 Alerta
+
+Representa notificações automáticas do sistema.
+
+Tipos:
+
+ALTO_VALOR
+
+LIMITE_EXCEDIDO
+
+SALDO_NEGATIVO
+
+🔹 Configuracoes
+
+Responsável por ler e gravar o arquivo settings.json.
+
+Permite:
+
+Alterar valor mínimo para alerta de alto gasto
+
+Definir meta de economia
+
+Configurar período de comparativos
+
+GasteMenos/
+│
+├── main.py
+├── settings.json
+│
+├── dominio/
+│ ├── categoria.py
+│ ├── lancamento.py
+│ ├── receita.py
+│ ├── despesa.py
+│ ├── alerta.py
+│ ├── financas.py
+│ ├── orcamento_mensal.py
+│ └── settings.py
+│
+├── infra/
+│ └── repositorio.py
+│
+├── data/
+│ ├── categorias.json
+│ └── lancamentos.json
+│
+└── tests/
+├── test_categoria.py
+├── test_lancamento.py
+├── test_alerta.py
+└── test_relatorio.py
+
+Como Executar
+
+python main.py
