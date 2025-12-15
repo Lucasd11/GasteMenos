@@ -47,7 +47,7 @@ class RepositorioFinancas:
         # Evitar duplicidade por ID
         for c in categorias:
             if c["id"] == categoria.get_id():
-                return  # já existe, não salva novamente
+                return
 
         categorias.append({
             "id": categoria.get_id(),

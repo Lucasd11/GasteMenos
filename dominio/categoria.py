@@ -39,7 +39,6 @@ class Categoria:
             raise ValueError("Tipo deve ser 'RECEITA' ou 'DESPESA'.")
         self._tipo = tipo
 
-        # Se for receita, não pode ter limite
         if tipo == "RECEITA":
             self._limite_mensal = 0.0
 
