@@ -251,31 +251,6 @@ python main.py
 
 ---
 
-## Testes Automatizados
-
-Instalação:
-
-```bash
-pip install pytest
-```
-
-Execução:
-
-```bash
-pytest
-```
-
----
-
-## Geração de Executável (.exe)
-
-```bash
-pip install pyinstaller
-pyinstaller --onefile --add-data "settings.json;." main.py
-```
-
----
-
 ## Autor
 
 Lucas Sousa
@@ -287,4 +262,4 @@ Lucas Sousa
 Este projeto foi desenvolvido com fins **acadêmicos**, priorizando clareza, organização do código e aderência aos conceitos de orientação a objetos.
 
 
-python main.py
+
