@@ -253,7 +253,7 @@ python main.py
 
 ## Autor
 
-Lucas Sousa
+Lucas Daniel Dias de Sousa
 
 ---
 
